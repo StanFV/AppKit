@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <title>Power Apps Tools</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="../icons/icon32.png" alt="" width="22" height="22">
+    <h1>Power Apps YAML Editor</h1>
+  </header>
+
+  <p class="hint" id="hint">Selecteer in Power Apps Studio een scherm of control in de structuurweergave.</p>
+
+  <button class="btn btn--primary" id="btnOpen">Selectie openen in editor</button>
+  <button class="btn" id="btnEmpty">Lege editor openen</button>
+
+  <label class="check">
+    <input type="checkbox" id="chkFab">
+    Knop "YAML bewerken" tonen in Studio
+  </label>
+
+  <p class="small">Sneltoets: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Y</kbd></p>
+  <script src="popup.js"></script>
+</body>
+</html>
