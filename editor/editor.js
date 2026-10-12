@@ -323,41 +323,72 @@
     }
 
     const mode = $("saveMode").value;
-    setStatus("busy", "Opslaan…");
+    let replace = null;
+    if (mode === "replace") {
+      const root = PaYaml.rootName(yaml);
+      if (!state.studioName || !root) {
+        showBanner("Vervangen kan alleen als de code uit Studio is opgehaald. Kies <b>Als nieuw toevoegen</b> of open het element opnieuw vanuit Studio.", "warn");
+        return;
+      }
+      const kind = /^\s*Screens:\s*$/m.test(yaml) ? "screen" : "control";
+      if (!state.replaceConfirmed) {
+        const ok = confirm(
+          `"${state.studioName}" wordt in Power Apps Studio verwijderd en vervangen door deze code.\n\n` +
+          "Mislukt het plakken, dan zet de extensie het origineel automatisch terug. Je kunt het vervangen in Studio ook zelf ongedaan maken met Ctrl+Z.\n\nDoorgaan?"
+        );
+        if (!ok) return;
+        state.replaceConfirmed = true;
+      }
+      const sel = state.session && state.session.selection;
+      replace = {
+        targetName: state.studioName,
+        newName: root.name,
+        kind,
+        parentName: sel && sel.name === state.studioName ? sel.parentName : null
+      };
+    }
+
+    setStatus("busy", mode === "replace" ? "Vervangen in Studio…" : "Opslaan…");
     const copied = await writeClipboard(yaml);
     await addHistory(yaml);
 
     let res;
     try {
-      res = await chrome.runtime.sendMessage({ type: "paste-to-studio", sessionId, yaml, mode });
+      res = await chrome.runtime.sendMessage({ type: "paste-to-studio", sessionId, yaml, mode, replace });
     } catch (e) {
       res = { ok: false, error: String(e.message || e) };
     }
 
+    const name = escapeHtml(currentName());
     if (res && res.ok) {
       state.lastSaved = yaml;
       chrome.storage.local.remove(DRAFT_KEY);
       refreshStatus();
-      const name = escapeHtml(currentName());
-      if (res.handled) {
-        showBanner(
-          mode === "replace"
-            ? `<b>${name}</b> is in Studio geplakt. Verwijder in Studio het originele element en geef de nieuwe versie (met _1) de oorspronkelijke naam.`
-            : `<b>${name}</b> is in Studio toegevoegd.`,
-          "ok"
-        );
+      if (res.replaced) {
+        state.studioName = replace.newName;
+        showBanner(`<b>${name}</b> is in Studio vervangen. Ongedaan maken kan in Studio met Ctrl+Z.`, "ok");
+      } else if (res.handled) {
+        showBanner(`<b>${name}</b> is in Studio toegevoegd.`, "ok");
       } else {
-        showBanner(
-          `De code staat op het klembord en het Studio tabblad is geopend. Selecteer daar het doel in de structuurweergave en druk op <b>Ctrl+V</b>.` +
-          (mode === "replace" ? " Verwijder daarna het origineel en hernoem de nieuwe versie." : ""),
-          "info"
-        );
+        showBanner("De code staat op het klembord en het Studio tabblad is geopend. Selecteer daar het doel in de structuurweergave en druk op <b>Ctrl+V</b>.", "info");
       }
     } else {
       setStatus("error", "Opslaan mislukt");
+      const message = String(res && res.error || "Opslaan in Studio is mislukt.").replace(/<[^>]+>/g, "");
+      const actions = [];
+      if (res && res.diagnostics) {
+        actions.push({
+          label: "Diagnose kopiëren",
+          onClick: async () => {
+            await writeClipboard(res.diagnostics);
+            showBanner("De diagnose staat op het klembord. Stuur deze door zodat het vervangen verbeterd kan worden.", "info");
+          }
+        });
+      }
       showBanner(
-        `${escapeHtml(res && res.error || "Opslaan in Studio is mislukt.")}${copied ? " De code staat wel op het klembord, dus je kunt hem in Studio met Ctrl+V plakken." : ""}`,
-        "error"
+        `${escapeHtml(message)}${copied && !/klembord/.test(message) ? " De code staat wel op het klembord, dus je kunt hem in Studio met Ctrl+V plakken." : ""}`,
+        "error",
+        actions
       );
     }
   }
@@ -459,6 +490,8 @@
 
   function loadYaml(yaml) {
     state.original = yaml;
+    const root = PaYaml.rootName(yaml);
+    state.studioName = root ? root.name : null;
     cm.setValue(yaml);
     cm.clearHistory();
     cm.setCursor(0, 0);

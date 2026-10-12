@@ -27,12 +27,14 @@ Wijzigingen worden automatisch als concept bewaard in de browser, zodat je niets
 3. Klik rechtsonder op de knop **YAML bewerken** of druk op **Ctrl+Shift+Y**. De code opent in een nieuw tabblad naast Studio.
 4. Pas de code aan en klik op **Opslaan in Studio** (of **Ctrl+S**).
 
-Bij opslaan zet de extensie de code op het klembord, schakelt terug naar het Studio tabblad en plakt de code daar. Lukt automatisch plakken niet, dan staat de code klaar op het klembord en druk je zelf op **Ctrl+V** in de structuurweergave.
-
 Met de keuzelijst naast de opslaanknop kies je wat er moet gebeuren:
 
-* **Origineel vervangen**: na het plakken staat de nieuwe versie naast het origineel (Studio voegt `_1` toe aan de naam). Verwijder het origineel en geef de nieuwe versie de oorspronkelijke naam.
-* **Als nieuw toevoegen**: de code wordt als extra scherm of control geplakt.
+* **Origineel vervangen**: de extensie verwijdert in Studio het originele scherm of de originele control en plakt de nieuwe code op dezelfde plek. Alle namen blijven gelijk (geen `_1`), zodat verwijzingen in formules blijven werken. Weigert Studio de nieuwe code, dan zet de extensie het origineel automatisch terug. Je kunt het vervangen in Studio altijd ongedaan maken met Ctrl+Z.
+* **Als nieuw toevoegen**: de code wordt als extra scherm of control geplakt bij de huidige selectie.
+
+Lukt automatisch plakken niet, dan staat de code klaar op het klembord en druk je zelf op **Ctrl+V** in de structuurweergave. Mislukt het vervangen, dan kun je in de editor op **Diagnose kopiëren** klikken. Daarmee kopieer je een beschrijving van de structuurweergave die helpt om het probleem op te lossen.
+
+Het laatste scherm van een app kan Studio niet verwijderen. Voeg in dat geval tijdelijk een leeg scherm toe.
 
 Werkt het ophalen van de selectie niet, open dan in Studio **Code weergeven** en klik op **Code kopiëren**. Klik daarna op **YAML bewerken**; de extensie gebruikt dan de zojuist gekopieerde code. Via het extensie-icoon kun je ook een lege editor openen en zelf YAML plakken.
 
@@ -41,9 +43,7 @@ Werkt het ophalen van de selectie niet, open dan in Studio **Code weergeven** en
 Power Apps Studio heeft geen openbare API om de code van een bestaand scherm te overschrijven. De enige ondersteunde manier om YAML in een app te krijgen is **Code plakken**, wat nieuwe controls aanmaakt. Deze extensie gebruikt daarom dezelfde route als jij handmatig zou doen, maar dan geautomatiseerd:
 
 * **Ophalen**: de extensie leest de code uit een geopend venster **Code weergeven**, klikt op **Code kopiëren** of stuurt een kopieeropdracht naar de geselecteerde control. Een klein script in de pagina vangt de YAML op op het moment dat Studio die naar het klembord schrijft.
-* **Opslaan**: de bewerkte YAML gaat naar het klembord en wordt als plakactie naar Studio gestuurd.
-
-Dat betekent dat het origineel niet automatisch wordt vervangen. Verwijderen en hernoemen doe je zelf in Studio, zodat de extensie nooit zonder jouw controle iets uit je app weghaalt.
+* **Opslaan**: de bewerkte YAML gaat naar het klembord. Bij vervangen verwijdert de extensie eerst het origineel via de structuurweergave (Delete-toets of het contextmenu) en stuurt daarna een plakactie naar Studio. Verschijnt het nieuwe element niet, dan wordt het verwijderen ongedaan gemaakt.
 
 Omdat de extensie meelift op de interface van Studio, kan een update van Power Apps het ophalen of plakken beïnvloeden. De terugvalroute via het klembord blijft altijd werken.
 
