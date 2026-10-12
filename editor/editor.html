@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YAML Editor · Power Apps Tools</title>
+  <link rel="icon" href="../icons/icon32.png">
+  <link rel="stylesheet" href="../vendor/codemirror/codemirror.css">
+  <link rel="stylesheet" href="../vendor/codemirror/material-darker.css">
+  <link rel="stylesheet" href="../vendor/codemirror/addon/dialog.css">
+  <link rel="stylesheet" href="../vendor/codemirror/addon/foldgutter.css">
+  <link rel="stylesheet" href="../vendor/codemirror/addon/lint.css">
+  <link rel="stylesheet" href="../vendor/codemirror/addon/matchesonscrollbar.css">
+  <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="../icons/icon32.png" alt="" width="24" height="24">
+      <div class="brand__text">
+        <div class="brand__title" id="docTitle">YAML Editor</div>
+        <div class="brand__sub" id="docSub">Power Apps Tools</div>
+      </div>
+    </div>
+
+    <div class="status" id="status" data-state="idle">
+      <span class="status__dot"></span><span id="statusText">Laden…</span>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="btnHistory" title="Eerder opgeslagen versies">Geschiedenis</button>
+      <button class="btn" id="btnRevert" title="Terug naar de code zoals die uit Studio kwam">Herstellen</button>
+      <button class="btn" id="btnOpenFile" title="YAML-bestand openen">Openen</button>
+      <button class="btn" id="btnDownload" title="Downloaden als .pa.yaml">Downloaden</button>
+      <button class="btn" id="btnCopy" title="Kopiëren naar klembord">Kopiëren</button>
+      <button class="btn" id="btnTheme" title="Licht of donker thema">◐</button>
+      <div class="split">
+        <button class="btn btn--primary" id="btnSave" title="Opslaan in Power Apps Studio (Ctrl+S)">Opslaan in Studio</button>
+        <select class="btn btn--primary split__select" id="saveMode" title="Wat moet er in Studio gebeuren?">
+          <option value="replace">Origineel vervangen</option>
+          <option value="add">Als nieuw toevoegen</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div class="banner" id="banner" hidden></div>
+
+  <main class="layout">
+    <aside class="outline" id="outlinePanel">
+      <div class="outline__head">
+        <span>Structuur</span>
+        <button class="icon-btn" id="btnToggleOutline" title="Paneel inklappen">‹</button>
+      </div>
+      <ul class="outline__list" id="outline"></ul>
+    </aside>
+
+    <section class="editor-wrap">
+      <div id="editor"></div>
+      <div class="dropzone" id="emptyState" hidden>
+        <div class="dropzone__card">
+          <h2>Nog geen YAML geladen</h2>
+          <p>Selecteer in Power Apps Studio een scherm of control en klik op <b>YAML bewerken</b>, of plak hier code die je met <b>Code kopiëren</b> hebt gekopieerd.</p>
+          <div class="dropzone__actions">
+            <button class="btn btn--primary" id="btnReadClipboard">Klembord lezen</button>
+            <button class="btn" id="btnStartEmpty">Leeg beginnen</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="statusbar">
+    <span id="cursorPos">Rg 1, Kol 1</span>
+    <span id="problems">Geen problemen</span>
+    <span class="statusbar__spacer"></span>
+    <span class="statusbar__hint">Ctrl+S opslaan · Ctrl+F zoeken · Ctrl+H vervangen · Ctrl+G ga naar regel · Ctrl+/ commentaar</span>
+  </footer>
+
+  <dialog id="historyDialog" class="dialog">
+    <form method="dialog">
+      <h3>Geschiedenis</h3>
+      <p class="muted">De laatste 30 versies die je naar Studio hebt opgeslagen. Ze staan alleen lokaal in deze browser.</p>
+      <ul class="history" id="historyList"></ul>
+      <div class="dialog__actions">
+        <button class="btn" id="btnClearHistory" type="button">Wissen</button>
+        <button class="btn btn--primary" value="close">Sluiten</button>
+      </div>
+    </form>
+  </dialog>
+
+  <input type="file" id="fileInput" accept=".yaml,.yml,.txt" hidden>
+
+  <script src="../vendor/codemirror/codemirror.js"></script>
+  <script src="../vendor/codemirror/yaml.js"></script>
+  <script src="../vendor/codemirror/addon/dialog.js"></script>
+  <script src="../vendor/codemirror/addon/searchcursor.js"></script>
+  <script src="../vendor/codemirror/addon/search.js"></script>
+  <script src="../vendor/codemirror/addon/jump-to-line.js"></script>
+  <script src="../vendor/codemirror/addon/annotatescrollbar.js"></script>
+  <script src="../vendor/codemirror/addon/matchesonscrollbar.js"></script>
+  <script src="../vendor/codemirror/addon/match-highlighter.js"></script>
+  <script src="../vendor/codemirror/addon/foldcode.js"></script>
+  <script src="../vendor/codemirror/addon/foldgutter.js"></script>
+  <script src="../vendor/codemirror/addon/indent-fold.js"></script>
+  <script src="../vendor/codemirror/addon/lint.js"></script>
+  <script src="../vendor/codemirror/addon/matchbrackets.js"></script>
+  <script src="../vendor/codemirror/addon/closebrackets.js"></script>
+  <script src="../vendor/codemirror/addon/active-line.js"></script>
+  <script src="../vendor/codemirror/addon/comment.js"></script>
+  <script src="../vendor/js-yaml/js-yaml.min.js"></script>
+  <script src="../src/yaml-tools.js"></script>
+  <script src="editor.js"></script>
+</body>
+</html>
