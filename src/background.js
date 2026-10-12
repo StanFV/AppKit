@@ -27,9 +27,9 @@ function newId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
-async function openEditorTab({ yaml, via, appTitle, tabId, frameId }) {
+async function openEditorTab({ yaml, via, appTitle, tabId, frameId, selection }) {
   const id = newId();
-  await saveSession(id, { yaml, via, appTitle, tabId, frameId, created: Date.now() });
+  await saveSession(id, { yaml, via, appTitle, tabId, frameId, selection: selection || null, created: Date.now() });
 
   const createProps = { url: chrome.runtime.getURL(`editor/editor.html?session=${id}`) };
   if (typeof tabId === "number") {
@@ -129,7 +129,7 @@ async function triggerOpenInTab(tab) {
   return sendToStudio(tab.id, { type: "trigger-open-editor" });
 }
 
-async function pasteToStudio({ sessionId, yaml, mode }) {
+async function pasteToStudio({ sessionId, yaml, mode, replace }) {
   const sessions = await getSessions();
   const session = sessions[sessionId] || {};
 
@@ -146,7 +146,7 @@ async function pasteToStudio({ sessionId, yaml, mode }) {
   await chrome.windows.update(tab.windowId, { focused: true });
 
   const preferred = tab.id === session.tabId ? session.frameId : undefined;
-  const res = await sendToStudio(tab.id, { type: "paste-yaml", yaml, mode }, preferred);
+  const res = await sendToStudio(tab.id, { type: "paste-yaml", yaml, mode, replace }, preferred);
   if (res.ok) await saveSession(sessionId, { tabId: tab.id, frameId: res.frameId });
   else res.error += " De YAML staat op het klembord.";
   return res;
@@ -162,6 +162,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             yaml: msg.yaml,
             via: msg.via,
             appTitle: msg.appTitle,
+            selection: msg.selection,
             tabId: sender.tab ? sender.tab.id : undefined,
             frameId: sender.frameId
           })
