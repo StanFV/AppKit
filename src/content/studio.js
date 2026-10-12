@@ -6,7 +6,6 @@
   window.__paToolsStudio = true;
 
   const TAG = "pa-tools";
-  const IS_STUDIO_FRAME = /\.create\.powerapps\.com$/i.test(location.hostname);
   const IS_MAC = /Mac/i.test(navigator.platform || navigator.userAgent);
 
   let lastCaptured = null; // { yaml, time, via }
@@ -22,6 +21,17 @@
   }
 
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  // Studio draait (afhankelijk van regio en versie) op verschillende domeinen
+  // en soms in een iframe. We herkennen het Studio-frame daarom aan de
+  // structuurweergave en niet aan het adres.
+  function hasTreeView() {
+    return !!document.querySelector("[role='tree'], [role='treegrid']");
+  }
+
+  function looksLikeStudio() {
+    return hasTreeView() && window.innerWidth >= 500 && window.innerHeight >= 300;
+  }
 
   function isVisible(el) {
     if (!el) return false;
@@ -204,7 +214,6 @@
 
   let toastHost = null;
   function showToast(html, kind = "info", duration = 5000) {
-    if (!IS_STUDIO_FRAME && window.top !== window) return;
     if (!toastHost) {
       toastHost = document.createElement("div");
       toastHost.className = "pa-tools-root pa-tools-toasts";
@@ -219,7 +228,6 @@
   }
 
   function createFloatingButton() {
-    if (!IS_STUDIO_FRAME) return;
     if (document.querySelector(".pa-tools-fab")) return;
 
     const btn = document.createElement("button");
@@ -249,7 +257,6 @@
   // Sneltoets binnen de Studio-frame (de manifest-sneltoets werkt ook als de
   // focus in een iframe staat, maar deze is directer).
   document.addEventListener("keydown", (e) => {
-    if (!IS_STUDIO_FRAME) return;
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "Y" || e.key === "y")) {
       e.preventDefault();
       e.stopPropagation();
@@ -263,10 +270,9 @@
     if (!msg || !msg.type) return;
 
     if (msg.type === "ping-studio") {
-      sendResponse({ studio: IS_STUDIO_FRAME, title: appTitle() });
+      sendResponse({ studio: looksLikeStudio(), title: appTitle() });
       return;
     }
-    if (!IS_STUDIO_FRAME) return;
 
     if (msg.type === "trigger-open-editor") {
       openEditor();
@@ -280,8 +286,13 @@
     }
   });
 
-  if (IS_STUDIO_FRAME) {
-    if (document.body) createFloatingButton();
-    else document.addEventListener("DOMContentLoaded", createFloatingButton);
-  }
+  // De structuurweergave verschijnt pas als Studio klaar is met laden.
+  const fabTimer = setInterval(() => {
+    if (document.querySelector(".pa-tools-fab")) {
+      clearInterval(fabTimer);
+    } else if (document.body && looksLikeStudio()) {
+      createFloatingButton();
+      clearInterval(fabTimer);
+    }
+  }, 1500);
 })();
