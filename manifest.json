@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Power Apps Tools: YAML Editor",
   "short_name": "Power Apps Tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Bewerk de YAML-code van Power Apps canvas schermen en controls in een volwaardige editor en plak ze terug in Power Apps Studio.",
   "icons": {
     "16": "icons/icon16.png",
@@ -26,19 +26,18 @@
     "clipboardRead",
     "clipboardWrite",
     "tabs",
-    "scripting"
+    "scripting",
+    "webNavigation"
   ],
   "host_permissions": [
-    "https://make.powerapps.com/*",
-    "https://make.preview.powerapps.com/*",
-    "https://*.create.powerapps.com/*"
+    "https://*.powerapps.com/*",
+    "https://*.powerplatformusercontent.com/*"
   ],
   "content_scripts": [
     {
       "matches": [
-        "https://make.powerapps.com/*",
-        "https://make.preview.powerapps.com/*",
-        "https://*.create.powerapps.com/*"
+        "https://*.powerapps.com/*",
+        "https://*.powerplatformusercontent.com/*"
       ],
       "js": [
         "src/content/studio.js"
@@ -51,7 +50,8 @@
     },
     {
       "matches": [
-        "https://*.create.powerapps.com/*"
+        "https://*.powerapps.com/*",
+        "https://*.powerplatformusercontent.com/*"
       ],
       "js": [
         "src/content/page-bridge.js"

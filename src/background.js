@@ -2,9 +2,8 @@
 // waar de YAML vandaan kwam, zodat "Opslaan" weer in dat tabblad terechtkomt.
 
 const STUDIO_URL_PATTERNS = [
-  "https://make.powerapps.com/*",
-  "https://make.preview.powerapps.com/*",
-  "https://*.create.powerapps.com/*"
+  "https://*.powerapps.com/*",
+  "https://*.powerplatformusercontent.com/*"
 ];
 
 async function getSessions() {
@@ -52,70 +51,105 @@ async function findStudioTab() {
   return tabs[0];
 }
 
+// Wordt in elk frame van het tabblad uitgevoerd om het Studio-frame te vinden.
+function probeFrame() {
+  return {
+    url: location.href,
+    tree: !!document.querySelector("[role='tree'], [role='treegrid']"),
+    monaco: !!document.querySelector(".monaco-editor"),
+    area: window.innerWidth * window.innerHeight,
+    loaded: !!window.__paToolsStudio
+  };
+}
+
+async function listFrameHosts(tabId) {
+  try {
+    const frames = await chrome.webNavigation.getAllFrames({ tabId });
+    const hosts = new Set();
+    for (const f of frames || []) {
+      try { hosts.add(new URL(f.url).hostname); } catch (e) { /* about:blank e.d. */ }
+    }
+    return [...hosts].filter(Boolean);
+  } catch (e) {
+    return [];
+  }
+}
+
+// Zoekt het frame met Power Apps Studio. Studio draait afhankelijk van regio
+// en versie op verschillende domeinen, vaak in een iframe. We herkennen het
+// aan de structuurweergave (of een geopend codevenster) en niet aan het adres.
+async function findStudioFrame(tabId, preferredFrameId) {
+  let results = [];
+  try {
+    results = await chrome.scripting.executeScript({ target: { tabId, allFrames: true }, func: probeFrame });
+  } catch (e) {
+    results = [];
+  }
+  const frames = results.filter((r) => r && r.result);
+  if (typeof preferredFrameId === "number") {
+    const preferred = frames.find((r) => r.frameId === preferredFrameId && (r.result.tree || r.result.monaco));
+    if (preferred) return preferred;
+  }
+  const score = (r) => (r.result.tree ? 2 : 0) + (r.result.monaco ? 1 : 0);
+  frames.sort((a, b) => score(b) - score(a) || b.result.area - a.result.area);
+  const best = frames[0];
+  return best && score(best) > 0 ? best : null;
+}
+
 // Na installeren of bijwerken van de extensie hebben al geopende Studio
 // tabbladen nog geen content scripts. Die injecteren we dan alsnog.
-async function injectContentScripts(tabId) {
-  const target = { tabId, allFrames: true };
+async function ensureContentScripts(tabId, frame) {
+  if (frame.result.loaded) return;
+  const target = { tabId, frameIds: [frame.frameId] };
   await chrome.scripting.insertCSS({ target, files: ["src/content/studio.css"] }).catch(() => {});
   await chrome.scripting.executeScript({ target, files: ["src/content/page-bridge.js"], world: "MAIN" }).catch(() => {});
   await chrome.scripting.executeScript({ target, files: ["src/content/studio.js"] });
 }
 
-async function triggerOpenInTab(tab) {
-  if (!tab || typeof tab.id !== "number") return { ok: false, error: "no-tab" };
-  const message = { type: "trigger-open-editor" };
+async function notFoundError(tabId) {
+  const hosts = await listFrameHosts(tabId);
+  return "Power Apps Studio is niet gevonden in dit tabblad. Open de app in bewerkmodus en zorg dat de structuurweergave (Tree view) zichtbaar is." +
+    (hosts.length ? ` Gevonden domeinen: ${hosts.join(", ")}.` : "");
+}
+
+async function sendToStudio(tabId, message, preferredFrameId) {
+  const frame = await findStudioFrame(tabId, preferredFrameId);
+  if (!frame) return { ok: false, error: await notFoundError(tabId) };
   try {
-    await chrome.tabs.sendMessage(tab.id, message);
-    return { ok: true };
+    await ensureContentScripts(tabId, frame);
+    const res = await chrome.tabs.sendMessage(tabId, message, { frameId: frame.frameId });
+    return { ...(res || { ok: false, error: "Studio gaf geen antwoord." }), frameId: frame.frameId };
   } catch (e) {
-    try {
-      await injectContentScripts(tab.id);
-      await chrome.tabs.sendMessage(tab.id, message);
-      return { ok: true };
-    } catch (err) {
-      return { ok: false, error: "not-studio" };
-    }
+    return { ok: false, error: "Studio reageert niet. Vernieuw het Studio tabblad en probeer het opnieuw." };
   }
+}
+
+async function triggerOpenInTab(tab) {
+  if (!tab || typeof tab.id !== "number") return { ok: false, error: "Geen actief tabblad gevonden." };
+  return sendToStudio(tab.id, { type: "trigger-open-editor" });
 }
 
 async function pasteToStudio({ sessionId, yaml, mode }) {
   const sessions = await getSessions();
   const session = sessions[sessionId] || {};
 
-  let tabId = session.tabId;
   let tab = null;
-  if (typeof tabId === "number") {
-    try { tab = await chrome.tabs.get(tabId); } catch (e) { tab = null; }
+  if (typeof session.tabId === "number") {
+    try { tab = await chrome.tabs.get(session.tabId); } catch (e) { tab = null; }
   }
   if (!tab) {
     tab = await findStudioTab();
-    if (!tab) return { ok: false, error: "Er is geen geopend Power Apps Studio tabblad gevonden." };
-    await saveSession(sessionId, { tabId: tab.id, frameId: undefined });
+    if (!tab) return { ok: false, error: "Er is geen geopend Power Apps Studio tabblad gevonden. De YAML staat op het klembord." };
   }
 
   await chrome.tabs.update(tab.id, { active: true });
   await chrome.windows.update(tab.windowId, { focused: true });
 
-  const message = { type: "paste-yaml", yaml, mode };
-  try {
-    if (typeof session.frameId === "number" && tab.id === session.tabId) {
-      return await chrome.tabs.sendMessage(tab.id, message, { frameId: session.frameId });
-    }
-  } catch (e) { /* frame is herladen, probeer alle frames */ }
-
-  try {
-    const res = await chrome.tabs.sendMessage(tab.id, message);
-    if (res) return res;
-  } catch (e) { /* hieronder opnieuw proberen */ }
-
-  try {
-    await injectContentScripts(tab.id);
-    const res = await chrome.tabs.sendMessage(tab.id, message);
-    if (res) return res;
-    throw new Error("geen antwoord");
-  } catch (e) {
-    return { ok: false, error: "Power Apps Studio reageert niet. Vernieuw het Studio tabblad en probeer het opnieuw. De YAML staat op het klembord." };
-  }
+  const preferred = tab.id === session.tabId ? session.frameId : undefined;
+  const res = await sendToStudio(tab.id, { type: "paste-yaml", yaml, mode }, preferred);
+  if (res.ok) await saveSession(sessionId, { tabId: tab.id, frameId: res.frameId });
+  else res.error += " De YAML staat op het klembord.";
+  return res;
 }
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {

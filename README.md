@@ -71,7 +71,9 @@ Tests draaien met Node 18 of hoger:
 npm test
 ```
 
-Andere Power Platform clouds (zoals GCC) voeg je toe door de bijbehorende domeinen op te nemen in `host_permissions` en `content_scripts` in `manifest.json` en de reguliere expressie `IS_STUDIO_FRAME` in `src/content/studio.js` aan te passen.
+De extensie herkent Studio aan de structuurweergave, niet aan het adres. Andere Power Platform clouds (zoals GCC) voeg je toe door de bijbehorende domeinen op te nemen in `host_permissions` en `content_scripts` in `manifest.json`.
+
+Gebeurt er niets als je op **Selectie openen in editor** klikt, dan toont de popup een melding met de domeinen die in het tabblad gevonden zijn. Staat daar een domein tussen dat niet in `manifest.json` voorkomt, voeg het dan toe.
 
 ## Licenties
 

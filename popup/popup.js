@@ -1,5 +1,5 @@
 /* global chrome */
-const STUDIO_RE = /^https:\/\/(make(\.preview)?\.powerapps\.com|[^/]+\.create\.powerapps\.com)\//i;
+const STUDIO_RE = /^https:\/\/([^/]+\.)?(powerapps\.com|powerplatformusercontent\.com)\//i;
 
 (async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -14,12 +14,16 @@ const STUDIO_RE = /^https:\/\/(make(\.preview)?\.powerapps\.com|[^/]+\.create\.p
   }
 
   btnOpen.addEventListener("click", async () => {
+    btnOpen.disabled = true;
+    hint.classList.remove("is-warn");
+    hint.textContent = "Studio zoeken…";
     const res = await chrome.runtime.sendMessage({ type: "open-from-active-tab" });
     if (res && res.ok) {
       window.close();
     } else {
-      hint.textContent = "Studio reageert niet. Vernieuw het Studio tabblad nadat de extensie is geïnstalleerd en probeer het opnieuw.";
+      hint.textContent = (res && res.error) || "Studio reageert niet. Vernieuw het Studio tabblad en probeer het opnieuw.";
       hint.classList.add("is-warn");
+      btnOpen.disabled = false;
     }
   });
 
