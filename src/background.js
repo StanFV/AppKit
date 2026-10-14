@@ -167,8 +167,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             frameId: sender.frameId
           })
         };
-      case "open-empty-editor":
-        return { ok: true, id: await openEditorTab({ yaml: msg.yaml || null, via: msg.via || "empty", appTitle: null }) };
       case "open-from-active-tab": {
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
         return triggerOpenInTab(tab);
@@ -188,6 +186,37 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   })().then(sendResponse, (err) => sendResponse({ ok: false, error: String(err && err.message || err) }));
   return true;
 });
+
+// Het extensie-icoon is alleen klikbaar op Power Apps-pagina's. Op andere
+// sites blijft het grijs.
+function isPowerAppsUrl(url) {
+  try {
+    const u = new URL(url);
+    return u.protocol === "https:" && /(^|\.)(powerapps\.com|powerplatformusercontent\.com)$/i.test(u.hostname);
+  } catch (e) {
+    return false;
+  }
+}
+
+async function updateAction(tabId, url) {
+  try {
+    if (isPowerAppsUrl(url)) await chrome.action.enable(tabId);
+    else await chrome.action.disable(tabId);
+  } catch (e) { /* tabblad bestaat niet meer */ }
+}
+
+async function syncAllTabs() {
+  await chrome.action.disable();
+  const tabs = await chrome.tabs.query({});
+  await Promise.all(tabs.map((t) => updateAction(t.id, t.url || t.pendingUrl || "")));
+}
+
+chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
+  if (info.url || info.status === "loading") updateAction(tabId, info.url || tab.url || "");
+});
+chrome.runtime.onInstalled.addListener(syncAllTabs);
+chrome.runtime.onStartup.addListener(syncAllTabs);
+syncAllTabs();
 
 chrome.commands.onCommand.addListener(async (command) => {
   if (command !== "open-editor") return;

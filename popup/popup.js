@@ -9,7 +9,7 @@ const STUDIO_RE = /^https:\/\/([^/]+\.)?(powerapps\.com|powerplatformusercontent
 
   if (!inStudio) {
     btnOpen.disabled = true;
-    hint.textContent = "Open een canvas app in Power Apps Studio om de selectie te bewerken. Je kunt ook een lege editor openen en YAML plakken.";
+    hint.textContent = "Open een canvas app in Power Apps Studio om de selectie te bewerken.";
     hint.classList.add("is-warn");
   }
 
@@ -25,11 +25,6 @@ const STUDIO_RE = /^https:\/\/([^/]+\.)?(powerapps\.com|powerplatformusercontent
       hint.classList.add("is-warn");
       btnOpen.disabled = false;
     }
-  });
-
-  document.getElementById("btnEmpty").addEventListener("click", async () => {
-    await chrome.runtime.sendMessage({ type: "open-empty-editor", via: "clipboard" });
-    window.close();
   });
 
   const chk = document.getElementById("chkFab");
