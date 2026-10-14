@@ -22,6 +22,8 @@ Wijzigingen worden automatisch als concept bewaard in de browser, zodat je niets
 
 ## Gebruik
 
+Het extensie-icoon is alleen klikbaar op Power Apps-pagina's (`*.powerapps.com`). Op andere sites is het grijs.
+
 1. Open een canvas app in Power Apps Studio.
 2. Selecteer in de structuurweergave het scherm of de control die je wilt bewerken.
 3. Klik rechtsonder op de knop **YAML bewerken** of druk op **Ctrl+Shift+Y**. De code opent in een nieuw tabblad naast Studio.
@@ -36,7 +38,7 @@ Lukt automatisch plakken niet, dan staat de code klaar op het klembord en druk j
 
 Het laatste scherm van een app kan Studio niet verwijderen. Voeg in dat geval tijdelijk een leeg scherm toe.
 
-Werkt het ophalen van de selectie niet, open dan in Studio **Code weergeven** en klik op **Code kopiëren**. Klik daarna op **YAML bewerken**; de extensie gebruikt dan de zojuist gekopieerde code. Via het extensie-icoon kun je ook een lege editor openen en zelf YAML plakken.
+Werkt het ophalen van de selectie niet, open dan in Studio **Code weergeven** en klik op **Code kopiëren**. Klik daarna op **YAML bewerken**; de extensie gebruikt dan de zojuist gekopieerde code.
 
 ## Hoe het werkt (en de beperking)
 
