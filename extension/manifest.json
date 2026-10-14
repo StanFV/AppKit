@@ -2,20 +2,20 @@
   "manifest_version": 3,
   "name": "AppKit for Power Apps",
   "short_name": "AppKit",
-  "version": "1.3.0",
+  "version": "1.3",
   "description": "Edit Power Apps canvas screens and controls as YAML: full editor, validation, outline and one-click replace in Studio.",
   "icons": {
-    "16": "icons/icon16.png",
-    "32": "icons/icon32.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
   },
   "action": {
-    "default_title": "AppKit for Power Apps",
+    "default_title": "AppKit",
     "default_popup": "popup/popup.html",
     "default_icon": {
-      "16": "icons/icon16.png",
-      "32": "icons/icon32.png"
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png"
     }
   },
   "background": {
