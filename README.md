@@ -53,7 +53,7 @@ Switch between a light and a dark theme with one click. Search (Ctrl+F), replace
 If pasting automatically does not work, the code is on the clipboard and you can press **Ctrl+V** in the tree view yourself. Studio cannot delete the last screen of an app; in that case, add an empty screen temporarily. If replacing fails, click **Diagnose kopiëren** (Copy diagnostics) in the editor and add the text to an [issue](https://github.com/StanFV/Power-Apps-Tools/issues).
 
 ## Installation
-Until AppKit is available in Microsoft Edge Add-ons, install the extension like this:
+AppKit is available in Microsoft Edge Add-ons store: https://microsoftedge.microsoft.com/addons/detail/appkit-for-power-apps/kjpegkinccbigjoalhjjegappajbjgmb. You can also install the extension like this:
 
 1. Download or clone this repository.
 2. Go to `edge://extensions` in Edge or `chrome://extensions` in Chrome.
