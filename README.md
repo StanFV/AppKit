@@ -1,80 +1,82 @@
 <p align="center">
-  <img src="design/icon-256.png" alt="AppKit icoon" width="96" height="96">
+  <img src="design/icon-256.png" alt="AppKit icon" width="96" height="96">
 </p>
 
 <h1 align="center">AppKit for Power Apps</h1>
 
 <p align="center">
-  Bewerk de schermen en controls van je Power Apps canvas apps als YAML vanuit één browserextensie.
+  Edit the screens and controls of your Power Apps canvas apps as YAML from a single browser extension.
 </p>
 
-Power Apps Studio laat de code van een scherm wel zien via **Code weergeven**, maar die editor is alleen-lezen. AppKit opent het scherm of de control die je in Studio hebt geselecteerd in een volledige YAML-editor. Daar bewerk je de code, zie je direct fouten en zet je het resultaat met één klik terug in Studio. De extensie werkt in Microsoft Edge en Chrome.
+Power Apps Studio shows the code of a screen in **View code**, but that editor is read-only. AppKit opens the screen or control you selected in Studio in a full YAML editor. There you edit the code, see errors right away and put the result back in Studio with one click. The extension works in Microsoft Edge and Chrome.
 
-![De AppKit-editor met een scherm als YAML](design/store-screenshots/1-editor.png)
+The interface of the extension is in Dutch. Button names below are given in Dutch with the English meaning in brackets.
 
-## Functies
+![The AppKit editor with a screen as YAML](design/store-screenshots/1-editor.png)
 
-### YAML-editor
-Bewerk een volledig scherm of een losse control in een editor met syntaxkleuring, regelnummers en blokken die je kunt inklappen. Het structuurpaneel toont alle schermen, containers en controls met hun type. Klik op een naam om ernaartoe te springen. Vanuit de werkbalk kun je:
+## Features
 
-- **Opslaan in Studio**: de code terugzetten in Power Apps Studio, ook met Ctrl+S.
-- **Kopiëren** en **Downloaden**: de code naar het klembord of als `.pa.yaml`-bestand.
-- **Openen**: een eerder opgeslagen YAML-bestand laden.
-- **Herstellen**: terug naar de code zoals die uit Studio kwam.
+### YAML editor
+Edit a full screen or a single control in an editor with syntax highlighting, line numbers and collapsible blocks. The outline panel lists every screen, container and control with its type. Click a name to jump to it. From the toolbar you can:
 
-### Controle terwijl je typt
-De editor controleert de code direct. Een fout in de YAML-structuur wordt rood gemarkeerd. Een eigenschap waarvan de formule niet met `=` begint en een naam die dubbel voorkomt krijgen een waarschuwing, want Studio weigert of hernoemt die bij het plakken. Klik onderin op het aantal problemen om naar het eerste probleem te springen.
+- **Opslaan in Studio** (Save to Studio): put the code back in Power Apps Studio, also with Ctrl+S.
+- **Kopiëren** (Copy) and **Downloaden** (Download): copy the code to the clipboard or save it as a `.pa.yaml` file.
+- **Openen** (Open): load a YAML file you saved earlier.
+- **Herstellen** (Restore): go back to the code as it came from Studio.
 
-![Waarschuwing bij een formule zonder =](design/store-screenshots/2-validation.png)
+### Checks while you type
+The editor checks the code as you type. Errors in the YAML structure are marked in red. A property whose formula does not start with `=` and a name that is used more than once get a warning, because Studio rejects or renames them when pasting. Click the problem count at the bottom to jump to the first problem.
 
-### Origineel vervangen in Studio
-Met **Opslaan in Studio** en de keuze **Origineel vervangen** verwijdert AppKit in Studio het originele scherm of de originele control en plakt de nieuwe code op dezelfde plek. Alle namen blijven gelijk, dus verwijzingen in formules blijven werken. Weigert Studio de nieuwe code, dan zet AppKit het origineel automatisch terug. In Studio kun je het vervangen altijd ongedaan maken met Ctrl+Z. Kies **Als nieuw toevoegen** om de code als extra scherm of control te plakken.
+![Warning for a formula without =](design/store-screenshots/2-validation.png)
 
-![Melding na het vervangen van een scherm](design/store-screenshots/3-replace.png)
+### Replace the original in Studio
+When you save with **Origineel vervangen** (Replace original), AppKit deletes the original screen or control in Studio and pastes the new code in the same place. All names stay the same, so references in formulas keep working. If Studio rejects the new code, AppKit restores the original automatically. You can always undo the replacement in Studio with Ctrl+Z. Choose **Als nieuw toevoegen** (Add as new) to paste the code as an extra screen or control instead.
 
-### Concepten en geschiedenis
-Wijzigingen worden automatisch als concept bewaard. Sluit je het tabblad per ongeluk, dan staan ze de volgende keer weer klaar. Elke versie die je naar Studio opslaat komt in de geschiedenis, waar je de laatste 30 versies met één klik terugzet.
+![Message after replacing a screen](design/store-screenshots/3-replace.png)
 
-![Geschiedenis van opgeslagen versies](design/store-screenshots/4-history.png)
+### Drafts and history
+Changes are saved as a draft automatically. If you close the tab by accident, they are waiting for you the next time. Every version you save to Studio is added to the history, where you can restore any of the last 30 versions with one click.
 
-### Licht en donker, met de bekende sneltoetsen
-Wissel met één klik tussen een licht en donker thema. Zoeken (Ctrl+F), vervangen (Ctrl+H), ga naar regel (Ctrl+G), commentaar aan of uit (Ctrl+/), regels verplaatsen (Alt+pijl) en dupliceren (Shift+Alt+pijl omlaag) werken zoals in andere code-editors.
+![History of saved versions](design/store-screenshots/4-history.png)
 
-![Donker thema met zoeken](design/store-screenshots/5-dark-mode.png)
+### Light and dark, with the shortcuts you know
+Switch between a light and a dark theme with one click. Search (Ctrl+F), replace (Ctrl+H), go to line (Ctrl+G), toggle comments (Ctrl+/), move lines (Alt+arrow) and duplicate lines (Shift+Alt+Down) work like in other code editors.
 
-## Gebruik
-1. Open een canvas app in [Power Apps](https://make.powerapps.com) in bewerkmodus.
-2. Selecteer in de structuurweergave het scherm of de control die je wilt bewerken.
-3. Klik rechtsonder in Studio op **YAML bewerken**, druk op **Ctrl+Shift+Y** of klik op het AppKit-icoon in de werkbalk van je browser en kies **Selectie openen in editor**. Het icoon is alleen actief op Power Apps-pagina's.
-4. De code opent in een nieuw tabblad. Pas de code aan en klik op **Opslaan in Studio**.
+![Dark theme with search](design/store-screenshots/5-dark-mode.png)
 
-Lukt automatisch plakken niet, dan staat de code op het klembord en druk je in de structuurweergave zelf op **Ctrl+V**. Het laatste scherm van een app kan Studio niet verwijderen; voeg in dat geval tijdelijk een leeg scherm toe. Mislukt het vervangen, klik dan in de editor op **Diagnose kopiëren** en voeg de tekst toe aan een [issue](https://github.com/StanFV/Power-Apps-Tools/issues).
+## Usage
+1. Open a canvas app in [Power Apps](https://make.powerapps.com) in edit mode.
+2. Select the screen or control you want to edit in the tree view.
+3. Click **YAML bewerken** (Edit YAML) in the bottom right of Studio, press **Ctrl+Shift+Y**, or click the AppKit icon in your browser toolbar and choose **Selectie openen in editor** (Open selection in editor). The icon is only active on Power Apps pages.
+4. The code opens in a new tab. Edit it and click **Opslaan in Studio** (Save to Studio).
 
-## Installeren
-Totdat AppKit in Microsoft Edge Add-ons staat, installeer je de extensie zo:
+If pasting automatically does not work, the code is on the clipboard and you can press **Ctrl+V** in the tree view yourself. Studio cannot delete the last screen of an app; in that case, add an empty screen temporarily. If replacing fails, click **Diagnose kopiëren** (Copy diagnostics) in the editor and add the text to an [issue](https://github.com/StanFV/Power-Apps-Tools/issues).
 
-1. Download of clone deze repository.
-2. Ga in Edge naar `edge://extensions` of in Chrome naar `chrome://extensions`.
-3. Zet de ontwikkelaarsmodus aan.
-4. Kies "Uitgepakt laden" en selecteer de map `extension`.
-5. Vernieuw een Power Apps-tabblad dat al open stond.
+## Installation
+Until AppKit is available in Microsoft Edge Add-ons, install the extension like this:
+
+1. Download or clone this repository.
+2. Go to `edge://extensions` in Edge or `chrome://extensions` in Chrome.
+3. Turn on developer mode.
+4. Choose "Load unpacked" and select the `extension` folder.
+5. Refresh any Power Apps tab that was already open.
 
 ## Privacy
-AppKit heeft geen eigen servers, maakt geen verbinding met internet en verzamelt geen gegevens. De code van je app wordt alleen in je browser verwerkt. Concepten en geschiedenis worden lokaal in de browser bewaard. Lees de volledige [privacyverklaring](PRIVACY.md).
+AppKit has no servers of its own, makes no network requests and collects no data. The code of your app is only processed in your browser. Drafts and history are stored locally in the browser. Read the full [privacy policy](PRIVACY.md).
 
-## Projectstructuur
+## Project structure
 
-| Map of bestand | Inhoud |
+| Folder or file | Contents |
 | --- | --- |
-| `extension/` | De extensie zelf, klaar om te laden of te zippen voor Edge Add-ons |
-| `extension/src/background.js` | Herkent Power Apps-pagina's en koppelt editortabbladen aan Power Apps Studio |
-| `extension/src/content/` | De knop in Studio en het ophalen, vervangen en plakken van YAML |
-| `extension/editor/` | De editor met validatie, structuurpaneel en geschiedenis |
-| `extension/vendor/` | CodeMirror 5 en js-yaml, met hun licentiebestanden |
-| `design/` | Bronbestanden van het icoon (`icon.svg`, `icon-small.svg` voor 16 en 32px) en grote versies voor de store |
-| `design/store-screenshots/` | Screenshots voor de store en deze README |
+| `extension/` | The extension itself, ready to load or to zip for Edge Add-ons |
+| `extension/src/background.js` | Recognises Power Apps pages and links editor tabs to Power Apps Studio |
+| `extension/src/content/` | The button in Studio and reading, replacing and pasting YAML |
+| `extension/editor/` | The editor with validation, outline and history |
+| `extension/vendor/` | CodeMirror 5 and js-yaml, with their license files |
+| `design/` | Icon source files (`icon.svg`, `icon-small.svg` for 16 and 32px) and large versions for the store |
+| `design/store-screenshots/` | Screenshots for the store and this README |
 
-## Verantwoording
-De editor gebruikt [CodeMirror 5](https://codemirror.net/5/) en [js-yaml](https://github.com/nodeca/js-yaml), beide onder de MIT-licentie.
+## Credits
+The editor uses [CodeMirror 5](https://codemirror.net/5/) and [js-yaml](https://github.com/nodeca/js-yaml), both under the MIT license.
 
-AppKit is niet gelieerd aan of goedgekeurd door Microsoft. Power Apps is een handelsmerk van de Microsoft-groep.
+AppKit is not affiliated with or endorsed by Microsoft. Power Apps is a trademark of the Microsoft group of companies.
