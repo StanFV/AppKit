@@ -1,9 +1,0 @@
-{
-  "name": "power-apps-tools",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Browserextensie om Power Apps canvas YAML te bewerken",
-  "scripts": {
-    "test": "node --test test/*.test.js"
-  }
-}

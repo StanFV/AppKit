@@ -56,7 +56,7 @@ body {
 .topbar {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   padding: 8px 16px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -86,11 +86,11 @@ body {
 .status[data-state="busy"] .status__dot { background: var(--brand); animation: pulse 1s infinite; }
 @keyframes pulse { 50% { opacity: 0.3; } }
 
-.actions { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+.actions { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
 
 .btn {
   height: 32px;
-  padding: 0 12px;
+  padding: 0 10px;
   border: 1px solid var(--border);
   border-radius: 4px;
   background: var(--surface);
