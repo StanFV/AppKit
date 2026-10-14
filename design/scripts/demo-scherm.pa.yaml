@@ -1,0 +1,663 @@
+Screens:
+  Info:
+    Properties:
+      Fill: =RGBA(243, 246, 250, 1)
+      LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
+    Children:
+      - inRoot:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            DropShadow: =DropShadow.None
+            Fill: =RGBA(243, 246, 250, 1)
+            Height: =Parent.Height
+            LayoutDirection: =LayoutDirection.Vertical
+            Width: =Parent.Width
+          Children:
+            - inHeader:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  Fill: =RGBA(255, 255, 255, 1)
+                  FillPortions: =0
+                  Height: =64
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =14
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                Children:
+                  - inTerug:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(4, 57, 94, 1)
+                        Height: =40
+                        HoverColor: =RGBA(0, 120, 212, 1)
+                        HoverFill: =RGBA(243, 246, 250, 1)
+                        Icon: =Icon.ArrowLeft
+                        OnSelect: =Navigate('Inzien (Hoofdscherm)', ScreenTransition.Fade)
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                        PressedColor: =RGBA(0, 120, 212, 1)
+                        PressedFill: =RGBA(223, 229, 236, 1)
+                        Tooltip: ="Terug naar overzicht"
+                        Width: =40
+                  - inLogo:
+                      Control: Image@2.2.3
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Height: =44
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Image: ='Bruinsma logo zonder icoon'
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Visible: =!(Info.Width < 640)
+                        Width: =150
+                  - inScheiding:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        DisabledFill: =RGBA(223, 229, 236, 1)
+                        Fill: =RGBA(223, 229, 236, 1)
+                        Height: =32
+                        HoverFill: =RGBA(223, 229, 236, 1)
+                        PressedFill: =RGBA(223, 229, 236, 1)
+                        Visible: =!(Info.Width < 640)
+                        Width: =1
+                  - inTitel:
+                      Control: Label@2.5.1
+                      Properties:
+                        BorderStyle: =BorderStyle.None
+                        Color: =RGBA(4, 57, 94, 1)
+                        FillPortions: =1
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Bold
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Size: =If(Info.Width < 640, 16, 20)
+                        Text: ="Hoe werkt de app"
+                        Wrap: =false
+            - inStappen:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutGap: =12
+                  LayoutOverflowY: =LayoutOverflow.Scroll
+                  PaddingBottom: =24
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                  PaddingTop: =24
+                Children:
+                  - inStap1:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Center
+                        BorderColor: =RGBA(223, 229, 236, 1)
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        Fill: =RGBA(255, 255, 255, 1)
+                        FillPortions: =0
+                        Height: =112
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =20
+                        LayoutMinHeight: =112
+                        PaddingBottom: =12
+                        PaddingLeft: =24
+                        PaddingRight: =24
+                        PaddingTop: =12
+                        RadiusBottomLeft: =16
+                        RadiusBottomRight: =16
+                        RadiusTopLeft: =16
+                        RadiusTopRight: =16
+                        Width: =Min(1000, Info.Width - 48)
+                      Children:
+                        - inStapNr1:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              Align: =Align.Center
+                              Color: =RGBA(255, 255, 255, 1)
+                              Fill: =RGBA(4, 57, 94, 1)
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Bold
+                              Height: =44
+                              LayoutMinHeight: =44
+                              PaddingBottom: =0
+                              PaddingLeft: =6
+                              PaddingRight: =6
+                              PaddingTop: =0
+                              RadiusBottomLeft: =22
+                              RadiusBottomRight: =22
+                              RadiusTopLeft: =22
+                              RadiusTopRight: =22
+                              Size: =16
+                              Text: ="1"
+                              Width: =44
+                              Wrap: =false
+                        - inStapIcoon1:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              AccessibleLabel: ="Item toevoegen"
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisplayMode: =DisplayMode.View
+                              Fill: =RGBA(232, 241, 250, 1)
+                              Height: =44
+                              Icon: =Icon.Add
+                              LayoutMinHeight: =0
+                              LayoutMinWidth: =0
+                              PaddingBottom: =10
+                              PaddingLeft: =10
+                              PaddingRight: =10
+                              PaddingTop: =10
+                              Visible: =!(Info.Width < 640)
+                              Width: =44
+                        - inStapTekstBlok1:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              Height: =86
+                              LayoutAlignItems: =LayoutAlignItems.Stretch
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =2
+                              LayoutMinHeight: =86
+                            Children:
+                              - inStapTitel1:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderStyle: =BorderStyle.None
+                                    Color: =RGBA(4, 57, 94, 1)
+                                    Font: =Font.'Segoe UI'
+                                    FontWeight: =FontWeight.Bold
+                                    Height: =28
+                                    PaddingBottom: =0
+                                    PaddingLeft: =0
+                                    PaddingRight: =0
+                                    PaddingTop: =0
+                                    Size: =18
+                                    Text: ="Item toevoegen"
+                              - inStapTekst1:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderStyle: =BorderStyle.None
+                                    Color: =RGBA(96, 108, 122, 1)
+                                    Font: =Font.'Segoe UI'
+                                    Height: =56
+                                    PaddingBottom: =0
+                                    PaddingLeft: =0
+                                    PaddingRight: =0
+                                    PaddingTop: =0
+                                    Size: =15
+                                    Text: ="Klik bij een lege kluis op Item toevoegen of op het plusteken en vul de gegevens in."
+                                    VerticalAlign: =VerticalAlign.Top
+                  - inStap2:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Center
+                        BorderColor: =RGBA(223, 229, 236, 1)
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        Fill: =RGBA(255, 255, 255, 1)
+                        FillPortions: =0
+                        Height: =112
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =20
+                        LayoutMinHeight: =112
+                        PaddingBottom: =12
+                        PaddingLeft: =24
+                        PaddingRight: =24
+                        PaddingTop: =12
+                        RadiusBottomLeft: =16
+                        RadiusBottomRight: =16
+                        RadiusTopLeft: =16
+                        RadiusTopRight: =16
+                        Width: =Min(1000, Info.Width - 48)
+                      Children:
+                        - inStapNr2:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              Align: =Align.Center
+                              Color: =RGBA(255, 255, 255, 1)
+                              Fill: =RGBA(4, 57, 94, 1)
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Bold
+                              Height: =44
+                              LayoutMinHeight: =44
+                              PaddingBottom: =0
+                              PaddingLeft: =6
+                              PaddingRight: =6
+                              PaddingTop: =0
+                              RadiusBottomLeft: =22
+                              RadiusBottomRight: =22
+                              RadiusTopLeft: =22
+                              RadiusTopRight: =22
+                              Size: =16
+                              Text: ="2"
+                              Width: =44
+                              Wrap: =false
+                        - inStapIcoon2:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              AccessibleLabel: ="Kluis leegmaken"
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisplayMode: =DisplayMode.View
+                              Fill: =RGBA(232, 241, 250, 1)
+                              Height: =44
+                              Icon: =Icon.Trash
+                              LayoutMinHeight: =0
+                              LayoutMinWidth: =0
+                              PaddingBottom: =10
+                              PaddingLeft: =10
+                              PaddingRight: =10
+                              PaddingTop: =10
+                              Visible: =!(Info.Width < 640)
+                              Width: =44
+                        - inStapTekstBlok2:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              Height: =86
+                              LayoutAlignItems: =LayoutAlignItems.Stretch
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =2
+                              LayoutMinHeight: =86
+                            Children:
+                              - inStapTitel2:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderStyle: =BorderStyle.None
+                                    Color: =RGBA(4, 57, 94, 1)
+                                    Font: =Font.'Segoe UI'
+                                    FontWeight: =FontWeight.Bold
+                                    Height: =28
+                                    PaddingBottom: =0
+                                    PaddingLeft: =0
+                                    PaddingRight: =0
+                                    PaddingTop: =0
+                                    Size: =18
+                                    Text: ="Kluis leegmaken"
+                              - inStapTekst2:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderStyle: =BorderStyle.None
+                                    Color: =RGBA(96, 108, 122, 1)
+                                    Font: =Font.'Segoe UI'
+                                    Height: =56
+                                    PaddingBottom: =0
+                                    PaddingLeft: =0
+                                    PaddingRight: =0
+                                    PaddingTop: =0
+                                    Size: =15
+                                    Text: ="Klik op Leegmaken om een item uit een kluis te halen en bevestig daarna in het venster dat verschijnt."
+                                    VerticalAlign: =VerticalAlign.Top
+                  - inStap3:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Center
+                        BorderColor: =RGBA(223, 229, 236, 1)
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        Fill: =RGBA(255, 255, 255, 1)
+                        FillPortions: =0
+                        Height: =112
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =20
+                        LayoutMinHeight: =112
+                        PaddingBottom: =12
+                        PaddingLeft: =24
+                        PaddingRight: =24
+                        PaddingTop: =12
+                        RadiusBottomLeft: =16
+                        RadiusBottomRight: =16
+                        RadiusTopLeft: =16
+                        RadiusTopRight: =16
+                        Width: =Min(1000, Info.Width - 48)
+                      Children:
+                        - inStapNr3:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              Align: =Align.Center
+                              Color: =RGBA(255, 255, 255, 1)
+                              Fill: =RGBA(4, 57, 94, 1)
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Bold
+                              Height: =44
+                              LayoutMinHeight: =44
+                              PaddingBottom: =0
+                              PaddingLeft: =6
+                              PaddingRight: =6
+                              PaddingTop: =0
+                              RadiusBottomLeft: =22
+                              RadiusBottomRight: =22
+                              RadiusTopLeft: =22
+                              RadiusTopRight: =22
+                              Size: =16
+                              Text: ="3"
+                              Width: =44
+                              Wrap: =false
+                        - inStapIcoon3:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              AccessibleLabel: ="Details bekijken"
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisplayMode: =DisplayMode.View
+                              Fill: =RGBA(232, 241, 250, 1)
+                              Height: =44
+                              Icon: =Icon.View
+                              LayoutMinHeight: =0
+                              LayoutMinWidth: =0
+                              PaddingBottom: =10
+                              PaddingLeft: =10
+                              PaddingRight: =10
+                              PaddingTop: =10
+                              Visible: =!(Info.Width < 640)
+                              Width: =44
+                        - inStapTekstBlok3:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              Height: =86
+                              LayoutAlignItems: =LayoutAlignItems.Stretch
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =2
+                              LayoutMinHeight: =86
+                            Children:
+                              - inStapTitel3:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderStyle: =BorderStyle.None
+                                    Color: =RGBA(4, 57, 94, 1)
+                                    Font: =Font.'Segoe UI'
+                                    FontWeight: =FontWeight.Bold
+                                    Height: =28
+                                    PaddingBottom: =0
+                                    PaddingLeft: =0
+                                    PaddingRight: =0
+                                    PaddingTop: =0
+                                    Size: =18
+                                    Text: ="Details bekijken"
+                              - inStapTekst3:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderStyle: =BorderStyle.None
+                                    Color: =RGBA(96, 108, 122, 1)
+                                    Font: =Font.'Segoe UI'
+                                    Height: =56
+                                    PaddingBottom: =0
+                                    PaddingLeft: =0
+                                    PaddingRight: =0
+                                    PaddingTop: =0
+                                    Size: =15
+                                    Text: ="Klik op een kluis die in gebruik is, of op Details, om alle gegevens van het item te zien."
+                                    VerticalAlign: =VerticalAlign.Top
+                  - inStap4:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Center
+                        BorderColor: =RGBA(223, 229, 236, 1)
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        Fill: =RGBA(255, 255, 255, 1)
+                        FillPortions: =0
+                        Height: =112
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =20
+                        LayoutMinHeight: =112
+                        PaddingBottom: =12
+                        PaddingLeft: =24
+                        PaddingRight: =24
+                        PaddingTop: =12
+                        RadiusBottomLeft: =16
+                        RadiusBottomRight: =16
+                        RadiusTopLeft: =16
+                        RadiusTopRight: =16
+                        Width: =Min(1000, Info.Width - 48)
+                      Children:
+                        - inStapNr4:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              Align: =Align.Center
+                              Color: =RGBA(255, 255, 255, 1)
+                              Fill: =RGBA(4, 57, 94, 1)
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Bold
+                              Height: =44
+                              LayoutMinHeight: =44
+                              PaddingBottom: =0
+                              PaddingLeft: =6
+                              PaddingRight: =6
+                              PaddingTop: =0
+                              RadiusBottomLeft: =22
+                              RadiusBottomRight: =22
+                              RadiusTopLeft: =22
+                              RadiusTopRight: =22
+                              Size: =16
+                              Text: ="4"
+                              Width: =44
+                              Wrap: =false
+                        - inStapIcoon4:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              AccessibleLabel: ="Historie bekijken"
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisplayMode: =DisplayMode.View
+                              Fill: =RGBA(232, 241, 250, 1)
+                              Height: =44
+                              Icon: =Icon.Clock
+                              LayoutMinHeight: =0
+                              LayoutMinWidth: =0
+                              PaddingBottom: =10
+                              PaddingLeft: =10
+                              PaddingRight: =10
+                              PaddingTop: =10
+                              Visible: =!(Info.Width < 640)
+                              Width: =44
+                        - inStapTekstBlok4:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              Height: =86
+                              LayoutAlignItems: =LayoutAlignItems.Stretch
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =2
+                              LayoutMinHeight: =86
+                            Children:
+                              - inStapTitel4:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderStyle: =BorderStyle.None
+                                    Color: =RGBA(4, 57, 94, 1)
+                                    Font: =Font.'Segoe UI'
+                                    FontWeight: =FontWeight.Bold
+                                    Height: =28
+                                    PaddingBottom: =0
+                                    PaddingLeft: =0
+                                    PaddingRight: =0
+                                    PaddingTop: =0
+                                    Size: =18
+                                    Text: ="Historie bekijken"
+                              - inStapTekst4:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderStyle: =BorderStyle.None
+                                    Color: =RGBA(96, 108, 122, 1)
+                                    Font: =Font.'Segoe UI'
+                                    Height: =56
+                                    PaddingBottom: =0
+                                    PaddingLeft: =0
+                                    PaddingRight: =0
+                                    PaddingTop: =0
+                                    Size: =15
+                                    Text: ="Gebruik de knop Historie om de logs van alle kluizen te bekijken en te doorzoeken op klant of ticket."
+                                    VerticalAlign: =VerticalAlign.Top
+                  - inStap5:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Center
+                        BorderColor: =RGBA(223, 229, 236, 1)
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        Fill: =RGBA(255, 255, 255, 1)
+                        FillPortions: =0
+                        Height: =112
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =20
+                        LayoutMinHeight: =112
+                        PaddingBottom: =12
+                        PaddingLeft: =24
+                        PaddingRight: =24
+                        PaddingTop: =12
+                        RadiusBottomLeft: =16
+                        RadiusBottomRight: =16
+                        RadiusTopLeft: =16
+                        RadiusTopRight: =16
+                        Width: =Min(1000, Info.Width - 48)
+                      Children:
+                        - inStapNr5:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              Align: =Align.Center
+                              Color: =RGBA(255, 255, 255, 1)
+                              Fill: =RGBA(4, 57, 94, 1)
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Bold
+                              Height: =44
+                              LayoutMinHeight: =44
+                              PaddingBottom: =0
+                              PaddingLeft: =6
+                              PaddingRight: =6
+                              PaddingTop: =0
+                              RadiusBottomLeft: =22
+                              RadiusBottomRight: =22
+                              RadiusTopLeft: =22
+                              RadiusTopRight: =22
+                              Size: =16
+                              Text: ="5"
+                              Width: =44
+                              Wrap: =false
+                        - inStapIcoon5:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              AccessibleLabel: ="Automatisch ticket"
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisplayMode: =DisplayMode.View
+                              Fill: =RGBA(232, 241, 250, 1)
+                              Height: =44
+                              Icon: =Icon.Send
+                              LayoutMinHeight: =0
+                              LayoutMinWidth: =0
+                              PaddingBottom: =10
+                              PaddingLeft: =10
+                              PaddingRight: =10
+                              PaddingTop: =10
+                              Visible: =!(Info.Width < 640)
+                              Width: =44
+                        - inStapTekstBlok5:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              Height: =86
+                              LayoutAlignItems: =LayoutAlignItems.Stretch
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =2
+                              LayoutMinHeight: =86
+                            Children:
+                              - inStapTitel5:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderStyle: =BorderStyle.None
+                                    Color: =RGBA(4, 57, 94, 1)
+                                    Font: =Font.'Segoe UI'
+                                    FontWeight: =FontWeight.Bold
+                                    Height: =28
+                                    PaddingBottom: =0
+                                    PaddingLeft: =0
+                                    PaddingRight: =0
+                                    PaddingTop: =0
+                                    Size: =18
+                                    Text: ="Automatisch ticket"
+                              - inStapTekst5:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderStyle: =BorderStyle.None
+                                    Color: =RGBA(96, 108, 122, 1)
+                                    Font: =Font.'Segoe UI'
+                                    Height: =56
+                                    PaddingBottom: =0
+                                    PaddingLeft: =0
+                                    PaddingRight: =0
+                                    PaddingTop: =0
+                                    Size: =15
+                                    Text: ="Zet 'Is er al een ticket?' op Nee om bij het opslaan automatisch een Autotask ticket aan te maken."
+                                    VerticalAlign: =VerticalAlign.Top
+            - inVoettekst:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  FillPortions: =0
+                  Height: =40
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =16
+                  LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                  LayoutMinHeight: =40
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                Children:
+                  - inVersie:
+                      Control: Label@2.5.1
+                      Properties:
+                        BorderStyle: =BorderStyle.None
+                        Color: =RGBA(96, 108, 122, 1)
+                        Font: =Font.'Segoe UI'
+                        Height: =24
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: ="App versie 2.2"
+                        Width: =140
+                  - inCredits:
+                      Control: Label@2.5.1
+                      Properties:
+                        Align: =Align.Right
+                        BorderStyle: =BorderStyle.None
+                        Color: =RGBA(96, 108, 122, 1)
+                        FillPortions: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =24
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: ="Met liefde gemaakt door Stan :) Bug of feature request? Loop even langs."
+                        Wrap: =false

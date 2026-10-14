@@ -2,8 +2,8 @@
 const test = require("node:test");
 const assert = require("node:assert");
 const path = require("node:path");
-const jsyaml = require(path.join(__dirname, "../vendor/js-yaml/js-yaml.min.js"));
-const PaYaml = require("../src/yaml-tools.js");
+const jsyaml = require(path.join(__dirname, "../extension/vendor/js-yaml/js-yaml.min.js"));
+const PaYaml = require("../extension/src/yaml-tools.js");
 
 const screen = `Screens:
   HomeScreen:

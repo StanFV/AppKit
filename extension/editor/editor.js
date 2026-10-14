@@ -45,6 +45,21 @@
     foldOptions: { rangeFinder: CodeMirror.fold.indent, widget: " … " },
     gutters: ["CodeMirror-lint-markers", "CodeMirror-linenumbers", "CodeMirror-foldgutter"],
     lint: { delay: 300 },
+    phrases: {
+      "Search:": "Zoeken:",
+      "(Use /re/ syntax for regexp search)": "(gebruik /re/ voor een reguliere expressie)",
+      "Replace:": "Vervangen:",
+      "Replace all:": "Alles vervangen:",
+      "With:": "Door:",
+      "Replace with:": "Vervangen door:",
+      "Replace?": "Vervangen?",
+      "Yes": "Ja",
+      "No": "Nee",
+      "All": "Alles",
+      "Stop": "Stoppen",
+      "Jump to line:": "Ga naar regel:",
+      "(Use line:column or scroll% syntax)": "(gebruik regel:kolom of percentage%)"
+    },
     extraKeys: {
       Tab: (ed) => {
         if (ed.somethingSelected()) ed.indentSelection("add");
@@ -147,8 +162,8 @@
     const type = root ? root.type : "";
     $("docTitle").textContent = name;
     const app = state.session && state.session.appTitle;
-    $("docSub").textContent = [type, app].filter(Boolean).join(" · ") || "Power Apps Tools";
-    document.title = `${isDirty() ? "● " : ""}${name} · YAML Editor`;
+    $("docSub").textContent = [type, app].filter(Boolean).join(" · ") || "AppKit for Power Apps";
+    document.title = `${isDirty() ? "● " : ""}${name} · AppKit`;
   }
 
   function isDirty() {
@@ -159,8 +174,8 @@
   function refreshStatus() {
     const errors = state.problems.filter((p) => p.severity === "error").length;
     if (errors) setStatus("error", `${errors} fout${errors === 1 ? "" : "en"}`);
-    else if (isDirty()) setStatus("dirty", "Niet opgeslagen wijzigingen");
-    else if (state.lastSaved !== null) setStatus("saved", "Opgeslagen in Studio");
+    else if (isDirty()) setStatus("dirty", "Gewijzigd");
+    else if (state.lastSaved !== null) setStatus("saved", "Opgeslagen");
     else setStatus("idle", "Ongewijzigd");
     updateTitle();
   }
@@ -348,7 +363,7 @@
       };
     }
 
-    setStatus("busy", mode === "replace" ? "Vervangen in Studio…" : "Opslaan…");
+    setStatus("busy", mode === "replace" ? "Vervangen…" : "Opslaan…");
     const copied = await writeClipboard(yaml);
     await addHistory(yaml);
 
