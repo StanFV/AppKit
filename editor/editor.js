@@ -465,15 +465,21 @@
   // ------------------------------------------------------------ Thema
 
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  // Zonder eigen keuze volgt de editor het systeemthema. Een klik wisselt
+  // altijd direct tussen licht en donker.
+  function isDark() {
+    return state.theme === "dark" || (state.theme === "auto" && darkQuery.matches);
+  }
   function applyTheme() {
-    const dark = state.theme === "dark" || (state.theme === "auto" && darkQuery.matches);
+    const dark = isDark();
     document.documentElement.dataset.theme = dark ? "dark" : "light";
     cm.setOption("theme", dark ? "material-darker" : "default");
-    $("btnTheme").title = `Thema: ${{ auto: "automatisch", light: "licht", dark: "donker" }[state.theme]}`;
+    $("btnTheme").textContent = dark ? "☀" : "☾";
+    $("btnTheme").title = dark ? "Licht thema" : "Donker thema";
   }
   darkQuery.addEventListener("change", applyTheme);
   $("btnTheme").addEventListener("click", () => {
-    state.theme = { auto: "light", light: "dark", dark: "auto" }[state.theme];
+    state.theme = isDark() ? "light" : "dark";
     chrome.storage.local.set({ theme: state.theme });
     applyTheme();
   });
