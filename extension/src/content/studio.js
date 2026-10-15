@@ -506,7 +506,16 @@
     btn.dataset.instance = INSTANCE;
     btn.type = "button";
     btn.title = "Open de geselecteerde control of het scherm in de YAML editor (Ctrl+Shift+Y)";
-    btn.innerHTML = `<span class="pa-tools-fab__icon">{ }</span><span class="pa-tools-fab__label">YAML bewerken</span>`;
+    btn.innerHTML = `<span class="pa-tools-fab__icon">{ }</span><span class="pa-tools-fab__label">YAML bewerken</span>` +
+      `<span class="pa-tools-fab__close" role="button" title="Knop verbergen" aria-label="Knop verbergen">×</span>`;
+
+    btn.querySelector(".pa-tools-fab__close").addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!alive()) return;
+      chrome.storage.local.set({ fabHidden: true });
+      showToast("De knop is verborgen. Open de editor met <b>Ctrl+Shift+Y</b> of via het AppKit-icoon in de werkbalk. Daar zet je de knop ook weer aan.", "info", 9000);
+    });
 
     // Focus in Studio laten waar die is, zodat de selectie in de
     // structuurweergave gekopieerd kan worden.

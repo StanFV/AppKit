@@ -40,7 +40,13 @@ async function openEditorTab({ yaml, via, appTitle, tabId, frameId, selection })
       createProps.openerTabId = tabId;
     } catch (e) { /* tabblad bestaat niet meer */ }
   }
-  await chrome.tabs.create(createProps);
+  try {
+    await chrome.tabs.create(createProps);
+  } catch (e) {
+    // Bijvoorbeeld een InPrivate-venster waar de extensie geen tabblad mag
+    // openen naast het bronvenster: dan in een gewoon venster openen.
+    await chrome.tabs.create({ url: createProps.url });
+  }
   return id;
 }
 
@@ -206,14 +212,30 @@ async function updateAction(tabId, url) {
 }
 
 async function syncAllTabs() {
-  await chrome.action.disable();
   const tabs = await chrome.tabs.query({});
   await Promise.all(tabs.map((t) => updateAction(t.id, t.url || t.pendingUrl || "")));
 }
 
+// Edge en Chrome zetten de instelling per tabblad terug als een pagina laadt.
+// Daarom zetten we die bij elke stap van het laden en bij het wisselen van
+// tabblad opnieuw. Standaard blijft het icoon aan, zodat een gemiste stap op
+// een Power Apps-pagina nooit tot een uitgeschakeld icoon leidt.
 chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
-  if (info.url || info.status === "loading") updateAction(tabId, info.url || tab.url || "");
+  if (info.url || info.status) updateAction(tabId, info.url || tab.url || "");
 });
+chrome.tabs.onActivated.addListener(async ({ tabId }) => {
+  try {
+    const tab = await chrome.tabs.get(tabId);
+    updateAction(tabId, tab.url || tab.pendingUrl || "");
+  } catch (e) { /* tabblad bestaat niet meer */ }
+});
+chrome.webNavigation.onCommitted.addListener((d) => {
+  if (d.frameId === 0) updateAction(d.tabId, d.url);
+});
+chrome.webNavigation.onHistoryStateUpdated.addListener((d) => {
+  if (d.frameId === 0) updateAction(d.tabId, d.url);
+});
+
 // Na installeren of bijwerken de scripts direct in open Power Apps-tabbladen
 // zetten. Anders blijft daar de knop van de oude versie staan, die niet meer
 // werkt, tot de gebruiker de pagina vernieuwt.
@@ -230,6 +252,7 @@ async function injectIntoOpenTabs() {
 }
 
 chrome.runtime.onInstalled.addListener(() => {
+  chrome.action.enable();
   syncAllTabs();
   injectIntoOpenTabs();
 });
