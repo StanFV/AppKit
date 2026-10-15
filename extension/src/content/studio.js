@@ -2,8 +2,30 @@
 // Haalt de YAML van de geselecteerde control of het geselecteerde scherm op,
 // opent die in de editor en plakt bewerkte YAML terug in Studio.
 (() => {
-  if (window.__paToolsStudio) return;
+  // Na een update van de extensie blijft het script van de oude versie in de
+  // pagina achter zonder verbinding met de extensie. Dat script mag een nieuwe
+  // versie niet tegenhouden; alleen een werkend script telt.
+  function alive() {
+    try {
+      return !!(chrome.runtime && chrome.runtime.id);
+    } catch (e) {
+      return false;
+    }
+  }
+  if (window.__paToolsStudioAlive && window.__paToolsStudioAlive()) return;
   window.__paToolsStudio = true;
+  window.__paToolsStudioAlive = alive;
+
+  // Knoppen van een oudere versie opruimen en oudere scripts laten stoppen.
+  const INSTANCE = Math.random().toString(36).slice(2);
+  let disposed = false;
+  document.querySelectorAll(".pa-tools-fab").forEach((el) => el.remove());
+  document.dispatchEvent(new CustomEvent("appkit:takeover", { detail: INSTANCE }));
+  document.addEventListener("appkit:takeover", (e) => {
+    if (e.detail === INSTANCE) return;
+    disposed = true;
+    document.querySelectorAll(`.pa-tools-fab[data-instance="${INSTANCE}"]`).forEach((el) => el.remove());
+  });
 
   const TAG = "pa-tools";
   const IS_MAC = /Mac/i.test(navigator.platform || navigator.userAgent);
@@ -471,11 +493,17 @@
     if (duration) setTimeout(() => toast.remove(), duration);
   }
 
+  function ownButton() {
+    return document.querySelector(`.pa-tools-fab[data-instance="${INSTANCE}"]`);
+  }
+
   function createFloatingButton() {
-    if (document.querySelector(".pa-tools-fab")) return;
+    if (disposed || ownButton()) return;
+    document.querySelectorAll(".pa-tools-fab").forEach((el) => el.remove());
 
     const btn = document.createElement("button");
     btn.className = "pa-tools-root pa-tools-fab";
+    btn.dataset.instance = INSTANCE;
     btn.type = "button";
     btn.title = "Open de geselecteerde control of het scherm in de YAML editor (Ctrl+Shift+Y)";
     btn.innerHTML = `<span class="pa-tools-fab__icon">{ }</span><span class="pa-tools-fab__label">YAML bewerken</span>`;
@@ -485,6 +513,10 @@
     btn.addEventListener("mousedown", (e) => e.preventDefault());
     btn.addEventListener("click", (e) => {
       e.preventDefault();
+      if (!alive()) {
+        showToast("AppKit is bijgewerkt. Vernieuw deze pagina (F5) om verder te gaan.", "warn", 10000);
+        return;
+      }
       openEditor();
     });
 
@@ -501,6 +533,7 @@
   // Sneltoets binnen de Studio-frame (de manifest-sneltoets werkt ook als de
   // focus in een iframe staat, maar deze is directer).
   document.addEventListener("keydown", (e) => {
+    if (disposed || !alive()) return;
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "Y" || e.key === "y")) {
       e.preventDefault();
       e.stopPropagation();
@@ -535,7 +568,7 @@
 
   // De structuurweergave verschijnt pas als Studio klaar is met laden.
   const fabTimer = setInterval(() => {
-    if (document.querySelector(".pa-tools-fab")) {
+    if (disposed || ownButton()) {
       clearInterval(fabTimer);
     } else if (document.body && looksLikeStudio()) {
       createFloatingButton();

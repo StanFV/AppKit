@@ -58,7 +58,7 @@ function probeFrame() {
     tree: !!document.querySelector("[role='tree'], [role='treegrid']"),
     monaco: !!document.querySelector(".monaco-editor"),
     area: window.innerWidth * window.innerHeight,
-    loaded: !!window.__paToolsStudio
+    loaded: !!(window.__paToolsStudioAlive && window.__paToolsStudioAlive())
   };
 }
 
@@ -214,7 +214,25 @@ async function syncAllTabs() {
 chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
   if (info.url || info.status === "loading") updateAction(tabId, info.url || tab.url || "");
 });
-chrome.runtime.onInstalled.addListener(syncAllTabs);
+// Na installeren of bijwerken de scripts direct in open Power Apps-tabbladen
+// zetten. Anders blijft daar de knop van de oude versie staan, die niet meer
+// werkt, tot de gebruiker de pagina vernieuwt.
+async function injectIntoOpenTabs() {
+  const tabs = await chrome.tabs.query({ url: STUDIO_URL_PATTERNS });
+  for (const tab of tabs) {
+    const target = { tabId: tab.id, allFrames: true };
+    try {
+      await chrome.scripting.insertCSS({ target, files: ["src/content/studio.css"] });
+      await chrome.scripting.executeScript({ target, files: ["src/content/page-bridge.js"], world: "MAIN" });
+      await chrome.scripting.executeScript({ target, files: ["src/content/studio.js"] });
+    } catch (e) { /* tabblad niet toegankelijk */ }
+  }
+}
+
+chrome.runtime.onInstalled.addListener(() => {
+  syncAllTabs();
+  injectIntoOpenTabs();
+});
 chrome.runtime.onStartup.addListener(syncAllTabs);
 syncAllTabs();
 
