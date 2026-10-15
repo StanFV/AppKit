@@ -18,6 +18,18 @@
   transition: opacity 0.15s, transform 0.15s;
 }
 .pa-tools-fab:hover { opacity: 1; transform: translateY(-1px); }
+.pa-tools-fab__close {
+  display: none;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  margin: 0 -6px 0 2px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  font: 600 13px/1 "Segoe UI", system-ui, sans-serif;
+}
+.pa-tools-fab:hover .pa-tools-fab__close { display: inline-grid; }
+.pa-tools-fab__close:hover { background: rgba(255, 255, 255, 0.4); }
 .pa-tools-fab__icon {
   display: inline-grid;
   place-items: center;

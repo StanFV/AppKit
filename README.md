@@ -50,7 +50,11 @@ Switch between a light and a dark theme with one click. Search (Ctrl+F), replace
 3. Click **YAML bewerken** (Edit YAML) in the bottom right of Studio, press **Ctrl+Shift+Y**, or click the AppKit icon in your browser toolbar and choose **Selectie openen in editor** (Open selection in editor). The icon is only active on Power Apps pages.
 4. The code opens in a new tab. Edit it and click **Opslaan in Studio** (Save to Studio).
 
-If pasting automatically does not work, the code is on the clipboard and you can press **Ctrl+V** in the tree view yourself. Studio cannot delete the last screen of an app; in that case, add an empty screen temporarily. If replacing fails, click **Diagnose kopiëren** (Copy diagnostics) in the editor and add the text to an [issue](https://github.com/StanFV/Power-Apps-Tools/issues).
+If pasting automatically does not work, the code is on the clipboard and you can press **Ctrl+V** in the tree view yourself. Studio cannot delete the last screen of an app; in that case, add an empty screen temporarily. If replacing fails, click **Diagnose kopiëren** (Copy diagnostics) in the editor and add the text to an [issue](https://github.com/StanFV/AppKit/issues).
+
+Don't need the **YAML bewerken** button in Studio? Hover over it and click the **×** to hide it. You can still open the editor with Ctrl+Shift+Y or the toolbar icon, and turn the button back on in the menu of the toolbar icon.
+
+To use AppKit in an InPrivate window, turn on "Allow in InPrivate" on the details page of the extension in `edge://extensions`.
 
 ## Installation
 AppKit is available in Microsoft Edge Add-ons store: https://microsoftedge.microsoft.com/addons/detail/appkit-for-power-apps/kjpegkinccbigjoalhjjegappajbjgmb. You can also install the extension like this:
